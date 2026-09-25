@@ -42,7 +42,7 @@ class NumberedCanvas(canvas.Canvas):
             self.setFillColor(colors.HexColor("#475569"))
             
             # Running Header
-            self.drawString(54, 750, "BCSE406L – NoSQL Databases | Review 2: Database Implementation & Prototype")
+            self.drawString(54, 750, "BCSE406L - NoSQL Databases | Review 2: Database Implementation & Prototype")
             self.drawRightString(558, 750, "Smart Hospital Information System")
             self.setStrokeColor(colors.HexColor("#cbd5e1"))
             self.setLineWidth(0.5)
@@ -50,7 +50,7 @@ class NumberedCanvas(canvas.Canvas):
             
             # Running Footer
             self.line(54, 45, 558, 45)
-            self.drawString(54, 34, "Team: N. Dadhania (23BCE2364), M. Sah (23BCE0868), A. Dewan (23BCE0351) | VIT")
+            self.drawString(54, 34, "Team: N. Dadhania (23BCE2364), M. Sah (23BCE0868), A. Dewan (23BCE0351) | GitHub: dadhanianisarg/Smart-Hospital-Information-System")
             page_text = f"Page {self._pageNumber} of {page_count}"
             self.drawRightString(558, 34, page_text)
             self.restoreState()
@@ -473,10 +473,19 @@ def generate_docx(doc_path):
 
     # SECTION 10 - 18
     add_sec("10. CODE QUALITY, MODULARITY & GIT STRUCTURE")
+    add_sec("10.1 Modular Architecture & Separation of Concerns", level=2)
     add_p(
         "The codebase adheres to industry-standard modular design principles. "
         "Separation of concerns is maintained across routes, controllers, Mongoose schemas, and Neo4j services. "
         "Environment variables are managed through .env and .env.example, preventing hardcoded credentials."
+    )
+    add_sec("10.2 Version Control & Official GitHub Repository", level=2)
+    add_p(
+        "The complete source code, automated test suite, database dumps, and documentation are publicly hosted on GitHub:\n"
+        "• Repository: https://github.com/dadhanianisarg/Smart-Hospital-Information-System\n"
+        "• Default Branch: main\n"
+        "• Visibility: Public (Academic Open Source)\n"
+        "• Clone Command: git clone https://github.com/dadhanianisarg/Smart-Hospital-Information-System.git"
     )
 
     add_sec("11. DATABASE DUMP & REPRODUCIBILITY")
@@ -515,6 +524,7 @@ def generate_docx(doc_path):
         ("Database Dump", "MongoDB JSON dumps + Neo4j Cypher reproduction script", "database/mongodb, database/neo4j", "COMPLETED (PASS)"),
         ("API Documentation", "Complete specification with status codes and payloads", "docs/API_DOCUMENTATION.md", "COMPLETED (PASS)"),
         ("QA & Automated Tests", "29 automated test cases executing against live DB", "server/tests/api.test.js", "COMPLETED (PASS)"),
+        ("Source Code & GitHub", "Public repository with atomic commit history", "github.com/dadhanianisarg/Smart-Hospital...", "COMPLETED (PASS)"),
     ]
     for req, imp, ev, st in req_rows:
         row = req_table.add_row().cells
@@ -665,8 +675,13 @@ def generate_docx(doc_path):
         "URL: http://localhost:5000\n"
     )
 
-    doc.save(doc_path)
-    print(f"[DOCX] Successfully saved {doc_path}")
+    try:
+        doc.save(doc_path)
+        print(f"[DOCX] Successfully saved {doc_path}")
+    except PermissionError:
+        alt_path = doc_path.replace(".docx", "_updated.docx")
+        doc.save(alt_path)
+        print(f"[DOCX] Note: {doc_path} is currently open in Word. Saved update to {alt_path}")
 
 
 # ==============================================================================
@@ -798,14 +813,14 @@ def generate_pdf(pdf_path):
     story.append(Spacer(1, 40))
     story.append(Paragraph("VELLORE INSTITUTE OF TECHNOLOGY", ParagraphStyle('CoverUni', fontName='Helvetica-Bold', fontSize=14, alignment=1, textColor=c_dark)))
     story.append(Paragraph("School of Computer Science and Engineering", ParagraphStyle('CoverSchool', fontName='Helvetica', fontSize=11, alignment=1, textColor=c_slate)))
-    story.append(Spacer(1, 20))
-    story.append(HRFlowable(width="60%", thickness=2, color=c_primary, spaceBefore=5, spaceAfter=25))
-    story.append(Paragraph("BCSE406L – NOSQL DATABASES", ParagraphStyle('CoverCourse', fontName='Helvetica-Bold', fontSize=16, alignment=1, textColor=c_primary)))
-    story.append(Spacer(1, 8))
+    story.append(Spacer(1, 16))
+    story.append(HRFlowable(width="60%", thickness=2, color=c_primary, spaceBefore=4, spaceAfter=20))
+    story.append(Paragraph("BCSE406L - NOSQL DATABASES", ParagraphStyle('CoverCourse', fontName='Helvetica-Bold', fontSize=16, alignment=1, textColor=c_primary)))
+    story.append(Spacer(1, 6))
     story.append(Paragraph("REVIEW 2: DATABASE IMPLEMENTATION & PROTOTYPE", style_cover_subtitle))
-    story.append(Spacer(1, 25))
+    story.append(Spacer(1, 20))
     story.append(Paragraph("Smart Hospital Information System using MongoDB and Neo4j", style_cover_title))
-    story.append(Spacer(1, 30))
+    story.append(Spacer(1, 22))
     
     meta_text = (
         "<b>Team Members / Submitted by:</b><br/>"
@@ -814,12 +829,29 @@ def generate_pdf(pdf_path):
         "3. Arnav Dewan (Registration No: 23BCE0351)<br/><br/>"
         "<b>Program:</b> B.Tech Computer Science and Engineering<br/>"
         "<b>Faculty / Evaluation:</b> Department of Computer Science<br/>"
-        "<b>Vellore Institute of Technology</b>, Academic Year 2026<br/>"
-        "<b>GitHub Repository:</b> https://github.com/dadhanianisarg/Smart-Hospital-Information-System"
+        "<b>Vellore Institute of Technology</b>, Academic Year 2026"
     )
     story.append(Paragraph(meta_text, style_cover_meta))
-    story.append(Spacer(1, 50))
-    story.append(HRFlowable(width="80%", thickness=0.5, color=colors.HexColor("#cbd5e1"), spaceBefore=10, spaceAfter=15))
+    story.append(Spacer(1, 16))
+
+    # Prominent Styled GitHub Repository Box
+    style_gh_hdr = ParagraphStyle('GHHdr', fontName='Helvetica-Bold', fontSize=9, textColor=c_primary, alignment=1)
+    style_gh_body = ParagraphStyle('GHBody', fontName='Helvetica', fontSize=10, textColor=colors.HexColor("#0369a1"), alignment=1)
+    t_gh_cover = Table([
+        [Paragraph("<b>OFFICIAL GITHUB REPOSITORY (SOURCE CODE, DATABASE DUMPS & PROTOTYPE)</b>", style_gh_hdr)],
+        [Paragraph("<a href='https://github.com/dadhanianisarg/Smart-Hospital-Information-System' color='#0284c7'><u><b>https://github.com/dadhanianisarg/Smart-Hospital-Information-System</b></u></a>", style_gh_body)]
+    ], colWidths=[480])
+    t_gh_cover.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), colors.HexColor("#f0f9ff")),
+        ('BOX', (0,0), (-1,-1), 1.5, colors.HexColor("#0284c7")),
+        ('LINEBELOW', (0,0), (-1,0), 0.5, colors.HexColor("#bae6fd")),
+        ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+        ('TOPPADDING', (0,0), (-1,-1), 6),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 6),
+    ]))
+    story.append(t_gh_cover)
+    story.append(Spacer(1, 25))
+    story.append(HRFlowable(width="80%", thickness=0.5, color=colors.HexColor("#cbd5e1"), spaceBefore=5, spaceAfter=10))
     story.append(Paragraph("Polyglot Persistence Academic Healthcare Prototype", ParagraphStyle('CoverTag', fontName='Helvetica-Oblique', fontSize=10, alignment=1, textColor=colors.HexColor("#64748b"))))
     story.append(PageBreak())
 
@@ -847,7 +879,7 @@ def generate_pdf(pdf_path):
         ["3.2", "MongoDB Document Modeling", "6"],
         ["3.3", "Neo4j Graph Schema & Node Labels", "7"],
         ["3.4", "Neo4j Directed Relationships", "7"],
-        ["3.5", "MongoDB–Neo4j Synchronization", "7"],
+        ["3.5", "MongoDB-Neo4j Synchronization", "7"],
         ["4.", "DATA MODELING & DESIGN DECISIONS", "8"],
         ["4.1", "Document vs Graph Allocation", "8"],
         ["4.2", "Embedding Decisions", "8"],
@@ -948,6 +980,8 @@ def generate_pdf(pdf_path):
         style_body
     ))
 
+    story.append(PageBreak())
+
     # --------------------------------------------------------------------------
     # 2. SYSTEM ARCHITECTURE
     # --------------------------------------------------------------------------
@@ -962,9 +996,12 @@ def generate_pdf(pdf_path):
         style_body
     ))
 
-    diag_pdf_path = "review2_submission/architecture_diagram.png"
+    diag_pdf_path = os.path.abspath("review2_submission/architecture_diagram.png")
+    if not os.path.exists(diag_pdf_path):
+        diag_pdf_path = os.path.abspath("assets/architecture_diagram.png")
     if os.path.exists(diag_pdf_path):
-        story.append(RLImage(diag_pdf_path, width=490, height=343))
+        story.append(Spacer(1, 4))
+        story.append(RLImage(diag_pdf_path, width=470, height=329))
         story.append(Spacer(1, 4))
         style_diag_caption = ParagraphStyle(
             'DiagCaption',
@@ -975,8 +1012,8 @@ def generate_pdf(pdf_path):
             textColor=colors.HexColor("#475569"),
             alignment=1
         )
-        story.append(Paragraph("<b>Figure 2.1:</b> Polyglot Persistence Architecture of the Smart Hospital Information System", style_diag_caption))
-        story.append(Spacer(1, 10))
+        story.append(Paragraph("<b>Figure 2.1:</b> Polyglot Persistence Architecture of the Smart Hospital Information System (React 18 + Express REST API + MongoDB + Neo4j)", style_diag_caption))
+        story.append(Spacer(1, 8))
 
     story.append(Paragraph("2.2 Data Flow & Polyglot Synchronization", style_h2))
     story.append(Paragraph(
@@ -1122,7 +1159,7 @@ def generate_pdf(pdf_path):
          "MongoDB Patient.findOneAndDelete({ patientId: 'P999' })")
     ]
     for title, ep, status, code, db_op in crud_examples:
-        story.append(Paragraph(f"<b>{title}</b> ({ep}) — <i>{status}</i>", style_h2))
+        story.append(Paragraph(f"<b>{title}</b> ({ep}) - <i>{status}</i>", style_h2))
         story.append(Paragraph(f"<b>Underlying Operation:</b> {db_op}", style_body))
         story.append(Paragraph(code.replace("\n", "<br/>").replace(" ", "&nbsp;"), style_code))
         story.append(Spacer(1, 4))
@@ -1301,6 +1338,7 @@ def generate_pdf(pdf_path):
     story.append(PageBreak())
     story.append(Paragraph("10. CODE QUALITY, MODULARITY & GIT STRUCTURE", style_h1))
     story.append(HRFlowable(width="100%", thickness=1, color=c_primary, spaceBefore=2, spaceAfter=8))
+    story.append(Paragraph("10.1 Layered Modularity & Separation of Concerns", style_h2))
     story.append(Paragraph(
         "The project follows strict separation of concerns across directories: <code>config/</code>, <code>models/</code>, "
         "<code>controllers/</code>, <code>routes/</code>, <code>services/</code>, and <code>middleware/</code>. "
@@ -1308,6 +1346,31 @@ def generate_pdf(pdf_path):
         "The codebase is version-controlled with atomic commits representing each development phase.",
         style_body
     ))
+    story.append(Paragraph("10.2 Version Control & Official GitHub Repository", style_h2))
+    story.append(Paragraph(
+        "The complete source code, automated QA test suite, database JSON dumps, Cypher graph scripts, and documentation "
+        "are publicly hosted and tracked on GitHub at:<br/>"
+        "<a href='https://github.com/dadhanianisarg/Smart-Hospital-Information-System' color='#0284c7'><u><b>https://github.com/dadhanianisarg/Smart-Hospital-Information-System</b></u></a>",
+        style_body
+    ))
+
+    t_git_meta = Table([
+        [Paragraph("<b>Parameter</b>", style_table_header), Paragraph("<b>Details</b>", style_table_header)],
+        [Paragraph("GitHub Repository", style_table_cell), Paragraph("<a href='https://github.com/dadhanianisarg/Smart-Hospital-Information-System' color='#0284c7'><u>dadhanianisarg/Smart-Hospital-Information-System</u></a>", style_table_cell)],
+        [Paragraph("Default Branch", style_table_cell), Paragraph("<code>main</code> (Fully synchronized)", style_table_cell)],
+        [Paragraph("Repository Visibility", style_table_cell), Paragraph("Public (Open Academic Access)", style_table_cell)],
+        [Paragraph("Clone Command", style_table_cell), Paragraph("<code>git clone https://github.com/dadhanianisarg/Smart-Hospital-Information-System.git</code>", style_table_cell)],
+        [Paragraph("Integration Status", style_table_cell), Paragraph("Passing 29/29 QA automated integration tests", style_table_cell)],
+    ], colWidths=[140, 360])
+    t_git_meta.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), c_dark),
+        ('GRID', (0,0), (-1,-1), 0.5, c_border),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ('TOPPADDING', (0,0), (-1,-1), 3),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 3),
+    ]))
+    story.append(t_git_meta)
+    story.append(Spacer(1, 10))
 
     # --------------------------------------------------------------------------
     # 11. DATABASE DUMP & REPRODUCIBILITY
@@ -1353,6 +1416,7 @@ def generate_pdf(pdf_path):
         ["Database Dumps", "MongoDB JSON dumps + Neo4j Cypher reproduction script", "database/mongodb, database/neo4j", "PASS"],
         ["API Documentation", "Complete specification with status codes and payloads", "docs/API_DOCUMENTATION.md", "PASS"],
         ["QA Test Suite", "29 automated test cases executing against live DB", "server/tests/api.test.js", "PASS"],
+        ["Source Code & GitHub", "Public repository with atomic commit history", "<a href='https://github.com/dadhanianisarg/Smart-Hospital-Information-System' color='#0284c7'><u>dadhanianisarg/Smart-Hospital...</u></a>", "PASS"],
     ]
     t_req = Table(
         [[Paragraph(f"<b>{c}</b>", style_table_header) for c in req_data[0]]] +
@@ -1642,8 +1706,9 @@ def generate_pdf(pdf_path):
         style_body
     ))
     setup_guide = (
-        "# 1. Clone or extract the repository\n"
-        "cd Project\n\n"
+        "# 1. Clone the repository from GitHub\n"
+        "git clone https://github.com/dadhanianisarg/Smart-Hospital-Information-System.git\n"
+        "cd Smart-Hospital-Information-System\n\n"
         "# 2. Install backend dependencies\n"
         "cd server\n"
         "npm install\n\n"

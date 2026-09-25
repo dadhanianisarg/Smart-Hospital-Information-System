@@ -2,10 +2,13 @@
 
 **Course:** BCSE406L – NoSQL Databases  
 **Evaluation:** Review 2 – Database Implementation & Prototype (10 Marks)  
-**Student:** Nisarg Dadhania  
-**Registration Number:** 23BCE2364  
-**Institution:** Vellore Institute of Technology (VIT)  
+**Team Members / Submitted by:**
+1. **Dadhania Nisarg Malaykumar** (23BCE2364)
+2. **Madhav Sah** (23BCE0868)
+3. **Arnav Dewan** (23BCE0351)  
+**Institution:** Vellore Institute of Technology (VIT), Chennai / Vellore  
 **Academic Year:** 2026  
+**GitHub Repository:** [https://github.com/dadhanianisarg/Smart-Hospital-Information-System](https://github.com/dadhanianisarg/Smart-Hospital-Information-System)
 
 ---
 
@@ -30,27 +33,9 @@ The **Smart Hospital Information System** is an academic polyglot persistence he
 
 ## 3. Project Architecture
 
-```
-                    +------------------------------------+
-                    |        React 18 User Interface     |
-                    |   (Dashboard, CRUD, Graph Explorer)|
-                    +-----------------+------------------+
-                                      |
-                                      | HTTP REST / JSON
-                                      v
-                    +-----------------+------------------+
-                    |       Node.js + Express Server     |
-                    |      Controllers & Validators      |
-                    +--------+------------------+--------+
-                             |                  |
-           Mongoose Driver   |                  |  Neo4j Driver / Bolt
-                             v                  v
-                 +-----------+------+    +------+-----------+
-                 |  MongoDB Database|    |   Neo4j Graph    |
-                 | (smart_hospital) |    |  Entities & Edges|
-                 |  7 Collections   |    |  6 Rel Types     |
-                 +------------------+    +------------------+
-```
+![Polyglot Persistence Architecture](assets/architecture_diagram.png)
+
+*Figure 3.1: 3-Tier Polyglot Architecture of the Smart Hospital Information System demonstrating React Frontend, Express API Gateway, and dual MongoDB & Neo4j databases.*
 
 ---
 

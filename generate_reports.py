@@ -11,7 +11,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import (
-    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, KeepTogether, HRFlowable
+    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, KeepTogether, HRFlowable, Image as RLImage
 )
 from reportlab.pdfgen import canvas
 
@@ -50,7 +50,7 @@ class NumberedCanvas(canvas.Canvas):
             
             # Running Footer
             self.line(54, 45, 558, 45)
-            self.drawString(54, 34, "Student: Nisarg Dadhania (23BCE2364) | Vellore Institute of Technology")
+            self.drawString(54, 34, "Team: N. Dadhania (23BCE2364), M. Sah (23BCE0868), A. Dewan (23BCE0351) | VIT")
             page_text = f"Page {self._pageNumber} of {page_count}"
             self.drawRightString(558, 34, page_text)
             self.restoreState()
@@ -115,10 +115,13 @@ def generate_docx(doc_path):
     p_meta = doc.add_paragraph()
     p_meta.alignment = WD_ALIGN_PARAGRAPH.CENTER
     r_meta = p_meta.add_run(
-        "Submitted by:\n"
-        "Nisarg Dadhania (Registration No: 23BCE2364)\n\n"
+        "Team Members / Submitted by:\n"
+        "1. Dadhania Nisarg Malaykumar (Registration No: 23BCE2364)\n"
+        "2. Madhav Sah (Registration No: 23BCE0868)\n"
+        "3. Arnav Dewan (Registration No: 23BCE0351)\n\n"
         "Faculty / Evaluation Panel: Department of Computer Science\n"
-        "Academic Year: 2026\n"
+        "Vellore Institute of Technology, Academic Year 2026\n"
+        "GitHub Repository: https://github.com/dadhanianisarg/Smart-Hospital-Information-System\n"
         "Submission Date: September 2026\n"
     )
     r_meta.font.size = Pt(11)
@@ -223,28 +226,14 @@ def generate_docx(doc_path):
         "The system adopts a 3-tier polyglot architecture: a React 18 client tier, an Express.js API tier, and a dual-database "
         "persistence tier (MongoDB + Neo4j). Requests are handled uniformly over JSON REST APIs."
     )
-    add_code(
-        "+-------------------------------------------------------------+\n"
-        "|                 REACT 18 CLIENT DASHBOARD                   |\n"
-        "|  (Dashboard, Patients, Doctors, Depts, Appts, Prescriptions) |\n"
-        "|                  [Neo4j Graph Explorer]                     |\n"
-        "+------------------------------+------------------------------+\n"
-        "                               |\n"
-        "                               | HTTP / JSON REST APIs\n"
-        "                               v\n"
-        "+-------------------------------------------------------------+\n"
-        "|                 NODE.JS / EXPRESS.JS BACKEND                |\n"
-        "|   Validators -> Controllers -> Mongoose ODM / Neo4j Driver  |\n"
-        "+----------------+----------------------------+---------------+\n"
-        "                 |                            |\n"
-        "                 v                            v\n"
-        "+--------------------------------+  +-------------------------+\n"
-        "|       MONGODB DATABASE         |  |       NEO4J GRAPH       |\n"
-        "|  (smart_hospital - 7 cols)     |  | (Entities & 6 Rel Types)|\n"
-        "|  - Document storage            |  | - Multi-hop traversals  |\n"
-        "|  - Embedded Prescriptions      |  | - Graph relationships   |\n"
-        "+--------------------------------+  +-------------------------+\n"
-    )
+    diag_docx_path = "review2_submission/architecture_diagram.png"
+    if os.path.exists(diag_docx_path):
+        doc.add_picture(diag_docx_path, width=Inches(6.2))
+        p_cap = doc.add_paragraph("Figure 2.1: Polyglot Persistence Architecture of the Smart Hospital Information System")
+        p_cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p_cap.runs[0].font.size = Pt(9.5)
+        p_cap.runs[0].font.italic = True
+        p_cap.paragraph_format.space_after = Pt(12)
 
     add_sec("2.2 Frontend Architecture", level=2)
     add_p(
@@ -819,12 +808,14 @@ def generate_pdf(pdf_path):
     story.append(Spacer(1, 30))
     
     meta_text = (
-        "<b>Student Name:</b> Nisarg Dadhania<br/>"
-        "<b>Registration Number:</b> 23BCE2364<br/>"
+        "<b>Team Members / Submitted by:</b><br/>"
+        "1. Dadhania Nisarg Malaykumar (Registration No: 23BCE2364)<br/>"
+        "2. Madhav Sah (Registration No: 23BCE0868)<br/>"
+        "3. Arnav Dewan (Registration No: 23BCE0351)<br/><br/>"
         "<b>Program:</b> B.Tech Computer Science and Engineering<br/>"
         "<b>Faculty / Evaluation:</b> Department of Computer Science<br/>"
-        "<b>Academic Year:</b> 2026<br/>"
-        "<b>Date of Evaluation:</b> September 2026"
+        "<b>Vellore Institute of Technology</b>, Academic Year 2026<br/>"
+        "<b>GitHub Repository:</b> https://github.com/dadhanianisarg/Smart-Hospital-Information-System"
     )
     story.append(Paragraph(meta_text, style_cover_meta))
     story.append(Spacer(1, 50))
@@ -971,25 +962,21 @@ def generate_pdf(pdf_path):
         style_body
     ))
 
-    arch_box = [
-        ["CLIENT TIER", "React 18 SPA (Vite) | Executive Dashboard | CRUD Pages | Neo4j Graph Explorer"],
-        ["API / BACKEND TIER", "Node.js (v22) + Express.js REST Framework | Input Validator | Error Middleware"],
-        ["PERSISTENCE TIER (NoSQL)", "MongoDB: smart_hospital (7 Collections) <--> Neo4j: Graph (5 Nodes, 6 Rel Types)"]
-    ]
-    t_arch = Table(
-        [[Paragraph(f"<b>{r[0]}</b>", style_table_cell), Paragraph(r[1], style_table_cell)] for r in arch_box],
-        colWidths=[130, 370]
-    )
-    t_arch.setStyle(TableStyle([
-        ('BACKGROUND', (0,0), (0,-1), colors.HexColor("#e0f2fe")),
-        ('BACKGROUND', (1,0), (1,-1), colors.HexColor("#f8fafc")),
-        ('GRID', (0,0), (-1,-1), 0.5, c_border),
-        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        ('TOPPADDING', (0,0), (-1,-1), 6),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 6),
-    ]))
-    story.append(t_arch)
-    story.append(Spacer(1, 10))
+    diag_pdf_path = "review2_submission/architecture_diagram.png"
+    if os.path.exists(diag_pdf_path):
+        story.append(RLImage(diag_pdf_path, width=490, height=343))
+        story.append(Spacer(1, 4))
+        style_diag_caption = ParagraphStyle(
+            'DiagCaption',
+            parent=styles['Normal'],
+            fontName='Helvetica-Oblique',
+            fontSize=8.5,
+            leading=11,
+            textColor=colors.HexColor("#475569"),
+            alignment=1
+        )
+        story.append(Paragraph("<b>Figure 2.1:</b> Polyglot Persistence Architecture of the Smart Hospital Information System", style_diag_caption))
+        story.append(Spacer(1, 10))
 
     story.append(Paragraph("2.2 Data Flow & Polyglot Synchronization", style_h2))
     story.append(Paragraph(

@@ -3,7 +3,12 @@
 **Course:** BCSE406L – NoSQL Databases  
 **Project:** Smart Hospital Information System using MongoDB and Neo4j  
 **Review:** Review 2 – Database Implementation & Prototype  
-**Author:** Nisarg Dadhania (23BCE2364)  
+**Team Members / Submitted by:**
+1. **Dadhania Nisarg Malaykumar** (23BCE2364)
+2. **Madhav Sah** (23BCE0868)
+3. **Arnav Dewan** (23BCE0351)  
+**Institution:** Vellore Institute of Technology (VIT)  
+**GitHub Repository:** [https://github.com/dadhanianisarg/Smart-Hospital-Information-System](https://github.com/dadhanianisarg/Smart-Hospital-Information-System)  
 **Base URL:** `http://localhost:5000/api`  
 **Content-Type:** `application/json`
 

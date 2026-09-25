@@ -51,9 +51,11 @@ export default function Sidebar({ activePage, setActivePage }) {
       </nav>
 
       <div className="sidebar-footer">
-        <div><strong>Student:</strong> Nisarg Dadhania</div>
-        <div><strong>Reg No:</strong> 23BCE2364</div>
-        <div>BCSE406L – Review 2</div>
+        <div style={{ fontWeight: 600, color: '#94a3b8', marginBottom: '4px' }}>Team Members:</div>
+        <div>• Dadhania Nisarg (23BCE2364)</div>
+        <div>• Madhav Sah (23BCE0868)</div>
+        <div>• Arnav Dewan (23BCE0351)</div>
+        <div style={{ marginTop: '4px', color: '#38bdf8' }}>BCSE406L – Review 2</div>
       </div>
     </aside>
   );

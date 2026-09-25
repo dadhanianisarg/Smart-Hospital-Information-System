@@ -19,3 +19,11 @@ npm-debug.log*
 Thumbs.db
 .vscode/
 .idea/
+
+# Review submissions & local evaluation material
+review2_submission/
+review*_submission/
+*.docx
+Nosql review 1.*
+NoSQL project ideas.*
+generate_reports.py
